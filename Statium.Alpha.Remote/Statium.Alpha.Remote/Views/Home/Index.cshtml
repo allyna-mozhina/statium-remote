@@ -1,0 +1,158 @@
+﻿<!--<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>-->
+<div class="row">
+    <ul id="users"></ul>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <form id="registerUser" method="POST">
+                <h3>Register</h3>
+                <p>
+                    <label>Username:</label>
+                    <input class="form-control" type="text" name="Username" />
+                </p>
+                <p>
+                    <label>Email:</label>
+                    <input class="form-control" type="text" name="Email" />
+                </p>
+                <p>
+                    <label>Password:</label>
+                    <input class="form-control" type="password" name="Password" />
+                </p>
+                <p>
+                    <label>Confirm password:</label>
+                    <input class="form-control" type="password" name="ConfirmPassword" />
+                </p>
+                <input type="button" class="btn btn-default" id="register" value="Sign In" />
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <h3>Log In</h3>
+            <form id="loginUser">
+                <input hidden readonly name="grant_type" value="password" />
+                <div class="form-group">
+                    <label>Username</label>
+                    <input class="form-control" type="text" name="username" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input class="form-control" type="password" name="password" />
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" id="login">Log In</button>
+                    <button type="button" class="btn btn-default" id="logout">Log Out</button>
+                </div>
+                <input readonly hidden id="token" />
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <form>
+                <h3>Grid Upload</h3>
+                <div class="form-group">
+                    <label>User</label>
+                    <input class="form-control" type="text" readonly id="user" />
+                </div>
+            </form>
+            <form method="POST" id="gridInfo">
+                <div class="form-group">
+                    <label>Grid Name</label>
+                    <input class="form-control" name="Name" type="text" />
+                </div>
+                <div class="form-group">
+                    <label>Grid Domain</label>
+                    <input class="form-control" name="DomainName" type="text" />
+                </div>
+            </form>
+            <form method="POST" enctype="multipart/form-data" id="gridFile">
+                <input hidden id="gridId" />
+                <div class="form-group">
+                    <label>Grid File</label>
+                    <input class="form-control" name="grid" type="file" />
+                </div>
+                <div>
+                    <input class="btn btn-default" type="button" id="upload" value="Upload" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    @*<div class="col-md-4">
+            <h2>Getting started</h2>
+            <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
+            a broad range of clients, including browsers and mobile devices. ASP.NET Web API
+            is an ideal platform for building RESTful applications on the .NET Framework.</p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Get more libraries</h2>
+            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Web Hosting</h2>
+            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+            <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+        </div>*@
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var tokenKey = 'accessToken';
+
+        $('#register').click(function() {
+            $.post("/api/Account/Register",
+                $("#registerUser").serialize(),
+                function(value) {
+                },
+                "json"
+            );
+        });
+
+        $('#login').click(function() {
+            $.post("/Token",
+                $("#loginUser").serialize(),
+                function(data) {
+                    //$("#token").val(data.access_token);
+                    sessionStorage.setItem(tokenKey, data.access_token);
+                    $("#user").val("Hello, " + data.userName);
+                },
+                "json"
+            );
+        });
+
+        $('#logout').click(function() {
+            //$("#token").val(null);
+            sessionStorage.removeItem(tokenKey);
+            $("#user").val(null);
+        });
+
+        $('#upload').click(function() {
+            var token = sessionStorage.getItem(tokenKey);
+            var headers = {};
+            if (token) {
+                headers.Authorization = 'Bearer ' + token;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/Grids/',
+                headers: headers,
+                data: $("#gridInfo").serialize()
+            }).success(function(data) {
+                $("#gridId").val(data.Id);
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/Grids/upload',
+                    headers: headers,
+                    data: $("#gridFile").serialize()
+                });
+            });
+        });
+
+    </script>
+}
