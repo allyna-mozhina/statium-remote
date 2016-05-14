@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Statium.Alpha.Remote.Models;
 
-namespace Statium.Alpha.Remote.Repositories
+namespace Statium.Alpha.Remote.Data.Repositories
 {
-    interface IRepository<TModel>
+    public interface IRepository<TModel>
     {
         IQueryable<TModel> GetAll();
 

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Web;
-using Microsoft.AspNet.Identity;
-using Statium.Alpha.Remote.Models;
+using Statium.Alpha.Remote.Data.Models;
 
-namespace Statium.Alpha.Remote.Repositories
+namespace Statium.Alpha.Remote.Data.Repositories
 {
-    public class MethodDbRepository : IRepository<Method>, IDisposable
+    public class MethodHardcodeRepository : IRepository<Method>
     {
-        private readonly DataContext _db = new DataContext();
+        private static readonly ICollection<Method> Methods = new List<Method>()
+        {
+            new Method { Id = 1, Name = "logistic_regression" }
+        };
 
         public IQueryable<Method> GetAll()
         {
-            return _db.Methods;
+            throw new NotImplementedException();
         }
 
         public IQueryable<Method> GetWhere(Func<Method, bool> predicate)
@@ -24,13 +24,12 @@ namespace Statium.Alpha.Remote.Repositories
 
         public Method Find(int id)
         {
-            throw new NotImplementedException();
+            return Methods.FirstOrDefault(m => m.Id == id);
         }
 
         public bool Add(Method model)
         {
             throw new NotImplementedException();
-            //await _db.SaveChangesAsync();
         }
 
         public bool Delete(int id)
@@ -41,11 +40,6 @@ namespace Statium.Alpha.Remote.Repositories
         public bool Update(int id, Method model)
         {
             throw new NotImplementedException();
-        }
-
-        public void Dispose()
-        {
-            ((IDisposable) _db).Dispose();
         }
     }
 }

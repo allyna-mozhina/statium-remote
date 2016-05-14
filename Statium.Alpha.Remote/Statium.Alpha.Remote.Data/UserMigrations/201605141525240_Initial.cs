@@ -1,4 +1,4 @@
-namespace Statium.Alpha.Remote.UserMigrations
+namespace Statium.Alpha.Remote.Data.UserMigrations
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -21,14 +21,14 @@ namespace Statium.Alpha.Remote.UserMigrations
                 "dbo.AspNetUserRoles",
                 c => new
                     {
-                        UserId = c.Int(nullable: false),
                         RoleId = c.Int(nullable: false),
+                        UserId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => new { t.UserId, t.RoleId })
+                .PrimaryKey(t => new { t.RoleId, t.UserId })
                 .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId)
-                .Index(t => t.RoleId);
+                .Index(t => t.RoleId)
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -61,11 +61,11 @@ namespace Statium.Alpha.Remote.UserMigrations
                 "dbo.AspNetUserLogins",
                 c => new
                     {
-                        LoginProvider = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
-                        ProviderKey = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
                         UserId = c.Int(nullable: false),
+                        ProviderKey = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
+                        LoginProvider = c.String(nullable: false, maxLength: 128, storeType: "nvarchar"),
                     })
-                .PrimaryKey(t => new { t.LoginProvider, t.ProviderKey, t.UserId })
+                .PrimaryKey(t => new { t.UserId, t.ProviderKey, t.LoginProvider })
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
             
@@ -80,8 +80,8 @@ namespace Statium.Alpha.Remote.UserMigrations
             DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
             DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
             DropIndex("dbo.AspNetUsers", "UserNameIndex");
-            DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
+            DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");

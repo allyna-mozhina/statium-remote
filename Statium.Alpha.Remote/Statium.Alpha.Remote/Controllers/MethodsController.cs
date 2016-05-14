@@ -9,8 +9,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using Statium.Alpha.Remote.Models;
-using Statium.Alpha.Remote.Repositories;
+using Statium.Alpha.Remote.Data;
+using Statium.Alpha.Remote.Data.Models;
+using Statium.Alpha.Remote.Data.Repositories;
 
 namespace Statium.Alpha.Remote.Controllers
 {

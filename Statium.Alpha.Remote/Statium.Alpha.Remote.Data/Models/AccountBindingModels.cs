@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Statium.Alpha.Remote.Models
+namespace Statium.Alpha.Remote.Data.Models
 {
     // Models used as parameters to AccountController actions.
 

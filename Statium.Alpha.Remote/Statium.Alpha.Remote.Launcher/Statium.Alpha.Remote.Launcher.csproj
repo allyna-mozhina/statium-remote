@@ -45,8 +45,14 @@
     <Compile Include="JobManagement\JobScheduler.cs" />
     <Compile Include="JobManagement\ResourceManager.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Statium.Alpha.Remote.Data\Statium.Alpha.Remote.Data.csproj">
+      <Project>{0fcdf5dd-3c5b-4525-a55a-d1cd26076535}</Project>
+      <Name>Statium.Alpha.Remote.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Statium.Alpha.Remote\Statium.Alpha.Remote.csproj">
       <Project>{eb47587b-e7b7-4df9-be30-6023848a68aa}</Project>
       <Name>Statium.Alpha.Remote</Name>

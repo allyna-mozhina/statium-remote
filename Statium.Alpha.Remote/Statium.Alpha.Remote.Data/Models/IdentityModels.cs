@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity.Owin;
 using MySql.Data.Entity;
-using Statium.Alpha.Remote.UserMigrations;
+using Statium.Alpha.Remote.Data.UserMigrations;
 
-namespace Statium.Alpha.Remote.Models
+namespace Statium.Alpha.Remote.Data.Models
 {
     // You can add profile data for the user by adding more properties to your User class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class User : IdentityUser<int, CustomUserLogin, CustomUserRole, CustomUserClaim>
@@ -78,6 +75,10 @@ namespace Statium.Alpha.Remote.Models
             modelBuilder.Entity<User>().Ignore(u => u.PhoneNumberConfirmed);
             modelBuilder.Entity<User>().Ignore(u => u.TwoFactorEnabled);
             modelBuilder.Entity<User>().Ignore(u => u.AccessFailedCount);
+
+            modelBuilder.Entity<CustomUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+            modelBuilder.Entity<CustomRole>().HasKey(r => new { r.Id });
+            modelBuilder.Entity<CustomUserLogin>().HasKey(l => new { l.UserId, l.ProviderKey, l.LoginProvider });
         }
     }
 }

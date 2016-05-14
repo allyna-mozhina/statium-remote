@@ -4,7 +4,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
-using Statium.Alpha.Remote.Models;
+using Statium.Alpha.Remote.Data.Models;
 
 namespace Statium.Alpha.Remote
 {

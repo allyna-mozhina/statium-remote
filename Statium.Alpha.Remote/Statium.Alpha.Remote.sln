@@ -9,6 +9,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Statium.Alpha.Remote.Exchan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statium.Alpha.Remote.Launcher", "Statium.Alpha.Remote.Launcher\Statium.Alpha.Remote.Launcher.csproj", "{97AF9B6C-4D5D-45A8-851C-1B6BD1B11B41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statium.Alpha.Remote.Data", "Statium.Alpha.Remote.Data\Statium.Alpha.Remote.Data.csproj", "{0FCDF5DD-3C5B-4525-A55A-D1CD26076535}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{97AF9B6C-4D5D-45A8-851C-1B6BD1B11B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97AF9B6C-4D5D-45A8-851C-1B6BD1B11B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97AF9B6C-4D5D-45A8-851C-1B6BD1B11B41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FCDF5DD-3C5B-4525-A55A-D1CD26076535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FCDF5DD-3C5B-4525-A55A-D1CD26076535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FCDF5DD-3C5B-4525-A55A-D1CD26076535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FCDF5DD-3C5B-4525-A55A-D1CD26076535}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

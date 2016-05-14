@@ -1,11 +1,11 @@
-namespace Statium.Alpha.Remote.DataMigrations
+namespace Statium.Alpha.Remote.Data.DataMigrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Statium.Alpha.Remote.Models.DataContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Statium.Alpha.Remote.Data.Models.DataContext>
     {
         public Configuration()
         {
@@ -13,7 +13,7 @@ namespace Statium.Alpha.Remote.DataMigrations
             MigrationsDirectory = @"DataMigrations";
         }
 
-        protected override void Seed(Statium.Alpha.Remote.Models.DataContext context)
+        protected override void Seed(Statium.Alpha.Remote.Data.Models.DataContext context)
         {
             //  This method will be called after migrating to the latest version.
 

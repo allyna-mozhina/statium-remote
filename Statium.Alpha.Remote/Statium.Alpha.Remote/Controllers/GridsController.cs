@@ -12,8 +12,9 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Microsoft.AspNet.Identity;
-using Statium.Alpha.Remote.Models;
-using Statium.Alpha.Remote.Repositories;
+using Statium.Alpha.Remote.Data;
+using Statium.Alpha.Remote.Data.Models;
+using Statium.Alpha.Remote.Data.Repositories;
 
 namespace Statium.Alpha.Remote.Controllers
 {

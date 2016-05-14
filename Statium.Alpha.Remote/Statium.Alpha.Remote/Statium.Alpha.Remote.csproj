@@ -49,8 +49,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MySql.Data, Version=6.8.7.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.6.8.7\lib\net45\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mysql.data.entity.EF6, Version=6.8.3.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
@@ -217,34 +217,13 @@
     <Compile Include="Controllers\GridsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MethodsController.cs" />
-    <Compile Include="DataMigrations\Configuration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClusterProfile.cs" />
-    <Compile Include="Models\Computer.cs" />
-    <Compile Include="Models\DataContext.cs" />
-    <Compile Include="Models\JobStatus.cs" />
-    <Compile Include="Repositories\MethodDbRepository.cs" />
-    <Compile Include="Models\AccountBindingModels.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Cluster.cs" />
-    <Compile Include="Models\Grid.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\Job.cs" />
-    <Compile Include="Models\Method.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
-    <Compile Include="Repositories\GridHardcodeRepository.cs" />
-    <Compile Include="Repositories\MethodHardcodeRepository.cs" />
-    <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="UserMigrations\201603241251155_Initial.cs" />
-    <Compile Include="UserMigrations\201603241251155_Initial.Designer.cs">
-      <DependentUpon>201603241251155_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserMigrations\Configuration.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
@@ -305,6 +284,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -315,9 +295,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UserMigrations\201603241251155_Initial.resx">
-      <DependentUpon>201603241251155_Initial.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\Statium.Alpha.Remote.Data\Statium.Alpha.Remote.Data.csproj">
+      <Project>{0fcdf5dd-3c5b-4525-a55a-d1cd26076535}</Project>
+      <Name>Statium.Alpha.Remote.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

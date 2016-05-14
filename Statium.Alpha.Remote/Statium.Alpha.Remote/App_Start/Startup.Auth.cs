@@ -8,8 +8,8 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
+using Statium.Alpha.Remote.Data.Models;
 using Statium.Alpha.Remote.Providers;
-using Statium.Alpha.Remote.Models;
 
 namespace Statium.Alpha.Remote
 {

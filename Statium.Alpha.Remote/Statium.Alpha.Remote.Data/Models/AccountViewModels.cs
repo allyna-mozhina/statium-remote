@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Statium.Alpha.Remote.Models
+namespace Statium.Alpha.Remote.Data.Models
 {
     // Models returned by AccountController actions.
 

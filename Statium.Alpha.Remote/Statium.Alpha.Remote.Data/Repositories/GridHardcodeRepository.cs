@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Statium.Alpha.Remote.Models;
+using Statium.Alpha.Remote.Data.Models;
 
-namespace Statium.Alpha.Remote.Repositories
+namespace Statium.Alpha.Remote.Data.Repositories
 {
     public class GridHardcodeRepository : IRepository<Grid>
     {

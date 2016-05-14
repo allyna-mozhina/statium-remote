@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Statium.Alpha.Remote.Data.Models;
 
-namespace Statium.Alpha.Remote.Models
+namespace Statium.Alpha.Remote.Data
 {
     public class Cluster : Computer
     {

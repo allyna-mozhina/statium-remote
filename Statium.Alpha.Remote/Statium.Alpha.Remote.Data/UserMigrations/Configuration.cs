@@ -1,15 +1,14 @@
-using System.Web;
 using Microsoft.AspNet.Identity;
-using Statium.Alpha.Remote.Models;
+using Statium.Alpha.Remote.Data.Models;
 
-namespace Statium.Alpha.Remote.UserMigrations
+namespace Statium.Alpha.Remote.Data.UserMigrations
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<UserDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<Statium.Alpha.Remote.Data.Models.UserDbContext>
     {
         public Configuration()
         {
@@ -17,7 +16,7 @@ namespace Statium.Alpha.Remote.UserMigrations
             MigrationsDirectory = @"UserMigrations";
         }
 
-        protected override void Seed(UserDbContext context)
+        protected override void Seed(Statium.Alpha.Remote.Data.Models.UserDbContext context)
         {
             InitializeUserData(context);
 
@@ -40,7 +39,7 @@ namespace Statium.Alpha.Remote.UserMigrations
             const string adminRole = "Administrator";
             const string clientRole = "Subscriber";
 
-            var roles = new [] {adminRole, clientRole};
+            var roles = new[] { adminRole, clientRole };
             var roleStore = new CustomRoleStore(context);
             var userStore = new CustomUserStore(context);
 
@@ -52,7 +51,7 @@ namespace Statium.Alpha.Remote.UserMigrations
                 }
             }
 
-            var admins = new []
+            var admins = new[]
             {
                 new User
                 {
@@ -83,5 +82,6 @@ namespace Statium.Alpha.Remote.UserMigrations
 
             context.SaveChanges();
         }
+
     }
 }
