@@ -221,8 +221,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClusterProfile.cs" />
     <Compile Include="Models\Computer.cs" />
     <Compile Include="Models\DataContext.cs" />
+    <Compile Include="Models\JobStatus.cs" />
     <Compile Include="Repositories\MethodDbRepository.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
