@@ -21,11 +21,14 @@ namespace Statium.Alpha.Remote.Controllers
     //[RoutePrefix("api/Grids")]
     public class GridsController : ApiController
     {
-        private readonly IRepository<Grid> _repository = new GridHardcodeRepository();
+        private readonly IRepository<Grid> _repository = new HardcodeRepository<Grid>(new List<Grid>()
+        {
+            new Grid() { Id = 1, Name = "Patients", DomainName = "Global" }
+        });
 
         // GET: api/Grids
         //[Authorize]
-        public IQueryable<Grid> GetGrids()
+        public IEnumerable<Grid> GetGrids()
         {
             var userId = User.Identity.GetUserId<int>();
             return _repository.GetWhere(g => g.UserId == userId);

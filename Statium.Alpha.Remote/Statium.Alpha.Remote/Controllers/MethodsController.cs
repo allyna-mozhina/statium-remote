@@ -17,15 +17,15 @@ namespace Statium.Alpha.Remote.Controllers
 {
     public class MethodsController : ApiController
     {
-        private readonly IRepository<Method> _repository = new MethodDbRepository(); 
+        private readonly IRepository<Method> _repository = null; 
 
-        // GET: api/Methods
+        /*// GET: api/Methods
         public IQueryable<Method> GetMethods()
         {
-            return _repository.GetAll();
+
         }
 
-        /*// GET: api/Methods/5
+        // GET: api/Methods/5
         [ResponseType(typeof(Method))]
         public async Task<IHttpActionResult> GetMethod(int id)
         {

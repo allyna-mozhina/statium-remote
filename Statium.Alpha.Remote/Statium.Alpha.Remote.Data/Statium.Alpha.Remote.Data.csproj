@@ -83,10 +83,9 @@
     <Compile Include="Models\JobStatus.cs" />
     <Compile Include="Models\Method.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\GridHardcodeRepository.cs" />
+    <Compile Include="Repositories\DbRepository.cs" />
+    <Compile Include="Repositories\HardcodeRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Repositories\MethodDbRepository.cs" />
-    <Compile Include="Repositories\MethodHardcodeRepository.cs" />
     <Compile Include="UserMigrations\201605141525240_Initial.cs" />
     <Compile Include="UserMigrations\201605141525240_Initial.Designer.cs">
       <DependentUpon>201605141525240_Initial.cs</DependentUpon>
