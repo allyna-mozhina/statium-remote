@@ -1,20 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Statium.Alpha.Remote.Data.Repositories
 {
-    public interface IRepository<TModel>
+    public interface IRepository<TEntity> : IDisposable
     {
-        IQueryable<TModel> GetAll();
+        IEnumerable<TEntity> GetAll();
 
-        IQueryable<TModel> GetWhere(Func<TModel, bool> predicate);
+        IEnumerable<TEntity> GetWhere(Func<TEntity, bool> predicate);
 
-        TModel Find(int id);
+        TEntity Find(int id);
 
-        bool Add(TModel model);
+        bool Add(TEntity entity);
 
         bool Delete(int id);
 
-        bool Update(int id, TModel model);
+        bool Delete(TEntity entityToDelete);
+
+        bool Update(TEntity entityToUpdate);
     }
 }
