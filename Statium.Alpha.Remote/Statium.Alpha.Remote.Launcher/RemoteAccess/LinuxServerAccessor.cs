@@ -51,7 +51,7 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
 
             using (ScpClient scpClient = new ScpClient(connInfo))
             {
-                using (IRepository<Grid> repository = new HardcodeRepository<Grid>(null))
+                using (IRepository<Grid> repository = new HardcodeRepository<Grid>(new LinkedList<Grid>()))
                 {
                     scpClient.Connect();
 
@@ -60,7 +60,7 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
                         Grid nextResult = new Grid() { DomainName = "global", User = job.User, UserId = job.UserId };
                         repository.Add(nextResult);
                         result[i] = nextResult.Id;
-                        scpClient.Download("~/Statium.Remote/{0}/result.csv", new FileInfo(Path.Combine("C:\\Users\\username\\Desktop", "result.csv")));
+                        scpClient.Download(string.Format("Statium.Remote/{0}/result.csv", job.Id), new FileInfo(Path.Combine("C:\\Users\\username\\Desktop", "result.csv")));
                     }
 
                     scpClient.Disconnect();

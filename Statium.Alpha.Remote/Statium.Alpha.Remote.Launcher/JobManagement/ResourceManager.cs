@@ -41,12 +41,9 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         //Upon this operation the job is removed from a remote system and will no longer be accesible
         public void KillJob(int jobId)
         {
-            using (IRepository<Job> repository = new HardcodeRepository<Job>(new Job[] { }))
-            {
-                Job subject = repository.Find(jobId);
-                IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-                accessor.KillJob(subject);
-            }
+            Job subject = activeJobs.Where(j => j.Id == jobId).First();
+            IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
+            accessor.KillJob(subject);            
         }
 
         //Fetch job execution results from a remote system
@@ -55,12 +52,9 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         {
             int[] result;
 
-            using (IRepository<Job> repository = new HardcodeRepository<Job>(new Job[] { }))
-            {
-                Job subject = repository.Find(jobId);
-                IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-                result = accessor.FetchResults(subject);
-            }
+            Job subject = activeJobs.Where(j => j.Id == jobId).First();
+            IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
+            result = accessor.FetchResults(subject);           
 
             return result;
         }
