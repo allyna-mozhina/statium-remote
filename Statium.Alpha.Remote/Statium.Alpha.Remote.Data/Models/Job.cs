@@ -17,10 +17,14 @@ namespace Statium.Alpha.Remote.Data.Models
 
         public User User { get; set; }
 
-        public int ClusterId { get; set; }
+        public int ClusterProfileId { get; set; }
 
-        public Cluster Cluster { get; set; }
+        public ClusterProfile ClusterProfile { get; set; }
 
         public virtual ICollection<Grid> Grids { get; set; } 
+
+        public int EstimatedTime { get; set; }
+
+        public int MaxCost { get; set; }
     }
 }

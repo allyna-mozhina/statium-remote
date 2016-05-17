@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{97AF9B6C-4D5D-45A8-851C-1B6BD1B11B41}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{29BCFE0A-B21B-4FCC-81FE-4F8EBDE9DEEC}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Statium.Alpha.Remote.Launcher</RootNamespace>
-    <AssemblyName>Statium.Alpha.Remote.Launcher</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>LauncherTest</RootNamespace>
+    <AssemblyName>LauncherTest</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,10 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Renci.SshNet, Version=2013.4.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SSH.NET.2013.4.7\lib\net40\Renci.SshNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,30 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteAccess\IRemoteSystemAccessor.cs" />
-    <Compile Include="JobManagement\JobScheduler.cs" />
-    <Compile Include="JobManagement\ResourceManager.cs" />
-    <Compile Include="RemoteAccess\LinuxServerAccessor.cs" />
-    <Compile Include="RemoteAccess\RemoteAccessorFactory.cs" />
-    <Compile Include="RemoteAccess\TorqueAccessor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Statium.Alpha.Remote.Data\Statium.Alpha.Remote.Data.csproj">
       <Project>{0fcdf5dd-3c5b-4525-a55a-d1cd26076535}</Project>
       <Name>Statium.Alpha.Remote.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Statium.Alpha.Remote\Statium.Alpha.Remote.csproj">
-      <Project>{eb47587b-e7b7-4df9-be30-6023848a68aa}</Project>
-      <Name>Statium.Alpha.Remote</Name>
+    <ProjectReference Include="..\Statium.Alpha.Remote.Launcher\Statium.Alpha.Remote.Launcher.csproj">
+      <Project>{97af9b6c-4d5d-45a8-851c-1b6bd1b11b41}</Project>
+      <Name>Statium.Alpha.Remote.Launcher</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

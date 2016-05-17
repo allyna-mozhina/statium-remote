@@ -9,7 +9,7 @@ using Statium.Alpha.Remote.Data.Models;
 namespace Statium.Alpha.Remote.Launcher.RemoteAccess
 {
     //Interface for classes doing protocol-specific access to various types of remote systems
-    interface IRemoteSystemAccessor
+    public interface IRemoteSystemAccessor
     {
         void SendJob(Job job);
 
@@ -18,5 +18,7 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
         void KillJob(Job job);
 
         int[] FetchResults(Job job);
+
+        bool TestAccess(ClusterProfile profile);
     }
 }
