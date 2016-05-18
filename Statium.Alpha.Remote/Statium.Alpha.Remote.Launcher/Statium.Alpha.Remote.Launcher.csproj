@@ -50,7 +50,7 @@
     <Compile Include="JobManagement\ResourceManager.cs" />
     <Compile Include="RemoteAccess\LinuxServerAccessor.cs" />
     <Compile Include="RemoteAccess\RemoteAccessorFactory.cs" />
-    <Compile Include="RemoteAccess\TorqueAccessor.cs" />
+    <Compile Include="RemoteAccess\PbsAccessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

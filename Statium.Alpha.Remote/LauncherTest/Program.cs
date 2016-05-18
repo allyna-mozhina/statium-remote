@@ -73,7 +73,11 @@ namespace LauncherTest
                 UserId = 1
             };
 
-            ResourceManager manaja = ResourceManager.GetInstance();
+            PbsAccessor accessor = new PbsAccessor();
+
+            accessor.SendJob(testJob);
+
+            /*ResourceManager manaja = ResourceManager.GetInstance();
 
             bool accessGranted = await manaja.TestAccess(ccfit, ccfitProfile);
 
@@ -89,7 +93,7 @@ namespace LauncherTest
                 manaja.SubmitJob(testJob);
 
                 manaja.KillJob(testJob.Id);
-            }   
+            } */  
         }
     }
 }

@@ -15,7 +15,13 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
 
         public IRemoteSystemAccessor GetAccessor(string type)
         {
-            return new LinuxServerAccessor();
+            if(type == "Linux")
+                return new LinuxServerAccessor();
+
+            if (type == "PBS")
+                return new PbsAccessor();
+
+            return null;
         }
 
         private Dictionary<string, IRemoteSystemAccessor> accessors;

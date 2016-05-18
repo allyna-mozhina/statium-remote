@@ -11,13 +11,13 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
     //Interface for classes doing protocol-specific access to various types of remote systems
     public interface IRemoteSystemAccessor
     {
-        void SendJob(Job job);
+        string SendJob(Job job);
 
-        JobStatus CheckJob(Job job);
+        JobStatus CheckJob(Job job, string remote_id);
 
-        void KillJob(Job job);
+        void KillJob(Job job, string remote_id);
 
-        int[] FetchResults(Job job);
+        int[] FetchResults(Job job, string remote_id);
 
         bool TestAccess(ClusterProfile profile);
     }

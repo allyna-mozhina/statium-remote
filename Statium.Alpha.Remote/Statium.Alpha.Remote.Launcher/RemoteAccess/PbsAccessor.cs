@@ -8,16 +8,17 @@ using Statium.Alpha.Remote.Data.Repositories;
 using Renci.SshNet;
 using System.IO;
 
+
 namespace Statium.Alpha.Remote.Launcher.RemoteAccess
 {
-    public class LinuxServerAccessor : IRemoteSystemAccessor
+    public class PbsAccessor : IRemoteSystemAccessor
     {
         public JobStatus CheckJob(Job job, string remote_id)
         {
             ConnectionInfo connInfo = new ConnectionInfo(job.ClusterProfile.Cluster.Url,
-                22, "prochkin", new AuthenticationMethod[]
+                22, "username", new AuthenticationMethod[]
                 {
-                    new PasswordAuthenticationMethod("prochkin", "youcantfeeltheheat")
+                    new PasswordAuthenticationMethod("username", "pass")
                 });
 
             JobStatus result = JobStatus.Processing;
@@ -26,11 +27,12 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
             {
                 sshClient.Connect();
 
-                using (SshCommand poll = sshClient.CreateCommand("echo YAY"))
+                using (SshCommand check = sshClient.CreateCommand(string.Format("qstat -a {0}", remote_id)))
                 {
-                    poll.Execute();
-                    string pollOut = poll.Result;
-                    result = ParsePoll(pollOut);
+                    check.Execute();
+
+                    if (check.ExitStatus == 0)
+                        result = ParseQstat(check.Result);
                 }
 
                 sshClient.Disconnect();
@@ -42,9 +44,9 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
         public int[] FetchResults(Job job, string remote_id)
         {
             ConnectionInfo connInfo = new ConnectionInfo(job.ClusterProfile.Cluster.Url,
-                22, "prochkin", new AuthenticationMethod[]
+                22, "username", new AuthenticationMethod[]
                 {
-                    new PasswordAuthenticationMethod("prochkin", "youcantfeeltheheat")
+                    new PasswordAuthenticationMethod("username", "pass")
                 });
 
             int[] result = new int[job.Method.OutGridCount];
@@ -60,7 +62,8 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
                         Grid nextResult = new Grid() { DomainName = "global", User = job.User, UserId = job.UserId };
                         repository.Add(nextResult);
                         result[i] = nextResult.Id;
-                        scpClient.Download(string.Format("Statium.Remote/{0}/result.csv", job.Id), new FileInfo(Path.Combine("C:\\Users\\username\\Desktop", "result.csv")));
+                        scpClient.Download(string.Format("Statium.Remote/{0}/result{1}.csv", job.Id, i), 
+                            new FileInfo(Path.Combine("C:\\Users\\username\\Desktop", "result.csv")));
                     }
 
                     scpClient.Disconnect();
@@ -88,20 +91,20 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
         public void KillJob(Job job, string remote_id)
         {
             ConnectionInfo connInfo = new ConnectionInfo(job.ClusterProfile.Cluster.Url,
-                22, "prochkin", new AuthenticationMethod[]
+                22, "username", new AuthenticationMethod[]
                 {
-                    new PasswordAuthenticationMethod("prochkin", "youcantfeeltheheat")
+                    new PasswordAuthenticationMethod("username", "pass")
                 });
 
             using (SshClient sshClient = new SshClient(connInfo))
             {
                 sshClient.Connect();
 
-                using (SshCommand killCommand = sshClient.CreateCommand(string.Format("kill {0}", job.Id)))
+                using (SshCommand kill = sshClient.CreateCommand(string.Format("qdel {0}", remote_id)))
                 {
-                    killCommand.Execute();
+                    kill.Execute();
 
-                    if (killCommand.ExitStatus != 0)
+                    if (kill.ExitStatus != 0)
                         return;
                 }
 
@@ -119,15 +122,16 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
 
         public string SendJob(Job job)
         {
-            ConnectionInfo connInfo = new ConnectionInfo(job.ClusterProfile.Cluster.Url,
-                22, "prochkin", new AuthenticationMethod[]
+            /*ConnectionInfo connInfo = new ConnectionInfo(job.ClusterProfile.Cluster.Url,
+                22, "username", new AuthenticationMethod[]
                 {
-                    new PasswordAuthenticationMethod("prochkin", "youcantfeeltheheat")
-                });
+                    new PasswordAuthenticationMethod("username", "pass")
+                });*/
 
-            string result;
-            
-            using (SshClient sshClient = new SshClient(connInfo))
+            MakeSubmitScript(job);
+            string result = "";
+
+            /*using (SshClient sshClient = new SshClient(connInfo))
             {
                 sshClient.Connect();
 
@@ -167,39 +171,27 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
                         return null;
                 }
 
-                using (SshCommand make = sshClient.CreateCommand(
-                    string.Format("g++ {0}cm_launcher.cpp {0}cmodule_api.cpp {0}cmodule.cpp {0}csv_io.cpp {0}simple_containers.cpp -o {0}launcher",
-                    string.Format("~/Statium.Remote/{0}/", job.Id))))
-                {
-                    make.Execute();
-
-                    if (make.ExitStatus != 0)
-                        return null;
-                }
-
-                using (SshCommand start = sshClient.CreateCommand(
-                    string.Format("{0}launcher 14 > {0}result.csv",
-                    string.Format("~/Statium.Remote/{0}/", job.Id))))
+                using (SshCommand start = sshClient.CreateCommand(string.Format("qsub {0}/submit.sh",
+                    string.Format("~/Statium.Remote/{0}", job.Id))))
                 {
                     start.Execute();
 
                     if (start.ExitStatus != 0)
                         return null;
+                    else
+                        result = start.Result;
                 }
+            }*/
 
-                sshClient.Disconnect();
-            }
-
-            result = job.Id.ToString();
             return result;
         }
 
         public bool TestAccess(ClusterProfile profile)
         {
             ConnectionInfo connInfo = new ConnectionInfo(profile.Cluster.Url,
-                22, "prochkin", new AuthenticationMethod[]
+                22, "username", new AuthenticationMethod[]
                 {
-                    new PasswordAuthenticationMethod("prochkin", "youcantfeeltheheat")
+                    new PasswordAuthenticationMethod("username", "pass")
                 });
 
             bool result = false;
@@ -208,12 +200,15 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
             {
                 sshClient.Connect();
 
-                using (SshCommand echo = sshClient.CreateCommand("echo TOTALLY ALIVE"))
+                using (SshCommand test = sshClient.CreateCommand("qstat -q -f"))
                 {
-                    echo.Execute();
+                    test.Execute();
 
-                    if (echo.ExitStatus == 0 && echo.Result == "TOTALLY ALIVE\n")
+                    if (test.ExitStatus == 0)
+                    {
                         result = true;
+                        UpdateProfile(profile, test.Result);
+                    }
                 }
 
                 sshClient.Disconnect();
@@ -222,9 +217,98 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
             return result;
         }
 
-        private JobStatus ParsePoll(string pollOut)
+        private JobStatus ParseQstat(string output)
         {
-            return JobStatus.Completed;
+            string[] tokens = output.Split(new char[] { ' ' });
+            string status = "";
+            if(tokens.Length >= 10)
+                status = tokens[9]; //such is output format, deal with it
+
+            JobStatus result;
+
+            switch (status)
+            {
+                case "W":
+                case "Q":
+                    {
+                        result = JobStatus.Queued;
+                        break;
+                    }
+                case "R":
+                case "E":
+                    {
+                        result = JobStatus.Running;
+                        break;
+                    }
+                case "C":
+                    {
+                        result = JobStatus.Completed;
+                        break;
+                    }
+                case "S":
+                case "H":
+                    {
+                        result = JobStatus.Aborted;
+                        break;
+                    }
+
+                default:
+                    {
+                        result = JobStatus.Processing;
+                        break;
+                    }
+            }
+
+            return result;
+        }
+
+        private void MakeSubmitScript(Job job)
+        {
+            StringBuilder scriptToBe = new StringBuilder();
+
+            scriptToBe.Append("#!/bin/sh\n");
+
+            scriptToBe.Append($"#PBS -N Statium.Remote.{job.Id}\n");
+
+            if(job.ClusterProfile.QueueName != null)
+                scriptToBe.Append($"#PBS -q {job.ClusterProfile.QueueName}\n");
+
+            string procType = job.ClusterProfile.Cluster.LaunchType == "GPU" ? "gpu" : "ppn";
+            int nodeNum = 4;
+            int procNum = 4;
+            string walltime = ConvertToWalltime(job.EstimatedTime);
+            string memoryReq = "2000m";
+            
+            scriptToBe.Append($"#PBS -l nodes={nodeNum}:{procType}={procNum}:mem={memoryReq}:walltime={walltime}\n");
+
+            scriptToBe.Append($"#PBS -o $PBS_O_HOME/Statium.Remote/{job.Id}/output.txt\n");
+
+            scriptToBe.Append($"#PBS -e $PBS_O_HOME/Statium.Remote/{job.Id}/errors.txt\n");
+
+            scriptToBe.Append($"cd ~/Statium.Remote/{job.Id}\n");
+
+            scriptToBe.Append($"make\n");
+
+            scriptToBe.Append($"mpirun -hostfile $PBS_NODEFILE -np {nodeNum} ./launcher\n");
+
+            using (FileStream fs = File.Create(Path.Combine("C:/Users/username/Desktop/", "submit.sh")))
+            {
+                string scriptString = scriptToBe.ToString();
+                byte[] scriptBytes = new UTF8Encoding(true).GetBytes(scriptString);
+                fs.Write(scriptBytes, 0, scriptBytes.Length);
+            }
+        }
+
+        private string ConvertToWalltime(int minutes)
+        {
+            int hours = minutes / 60;
+            int minutesLeft = minutes % 60;
+            return $"{hours}:{minutesLeft}:00";
+        }
+
+        private void UpdateProfile(ClusterProfile profile, string qstatOut)
+        {
+
         }
     }
 }

@@ -22,17 +22,20 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
 
             IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(job.ClusterProfile.Cluster.LaunchType);
 
-            accessor.SendJob(job);
-            activeJobs.AddLast(job);
+            string newKey = accessor.SendJob(job);
+            activeJobs.Add(job.Id, newKey);
         }
 
         //Get job execution status from remote system
         public async Task<JobStatus> GetJobStatusAsync(int jobId)
         {
             JobStatus result = JobStatus.Aborted;
-            Job subject = activeJobs.Where(j => j.Id == jobId).First();
+            Job subject = new Job();//activeJobs.Where(j => j.Id == jobId).First();
             IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-            result = accessor.CheckJob(subject);    
+            result = accessor.CheckJob(subject, activeJobs[jobId]);
+
+            if (result == JobStatus.Aborted || result == JobStatus.Killed)
+                activeJobs.Remove(jobId);    
 
             return result;
         }
@@ -41,9 +44,10 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         //Upon this operation the job is removed from a remote system and will no longer be accesible
         public void KillJob(int jobId)
         {
-            Job subject = activeJobs.Where(j => j.Id == jobId).First();
+            Job subject = new Job();
             IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-            accessor.KillJob(subject);            
+            accessor.KillJob(subject, activeJobs[jobId]);
+            activeJobs.Remove(jobId);
         }
 
         //Fetch job execution results from a remote system
@@ -52,10 +56,10 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         {
             int[] result;
 
-            Job subject = activeJobs.Where(j => j.Id == jobId).First();
+            Job subject = new Job();//activeJobs.Where(j => j.Id == jobId).First();
             IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-            result = accessor.FetchResults(subject);           
-
+            result = accessor.FetchResults(subject, activeJobs[jobId]);
+            activeJobs.Remove(jobId);
             return result;
         }
 
@@ -70,7 +74,7 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         {
             scheduler = new JobScheduler();
             accessorFactory = new RemoteAccessorFactory("jai");
-            activeJobs = new LinkedList<Job>();
+            activeJobs = new Dictionary<int, string>();
         }
 
         public static ResourceManager GetInstance()
@@ -84,6 +88,6 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         private static ResourceManager instance = null;
         private JobScheduler scheduler;
         private RemoteAccessorFactory accessorFactory;
-        private LinkedList<Job> activeJobs;
+        private Dictionary<int, string> activeJobs;
     }
 }
