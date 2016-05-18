@@ -14,13 +14,16 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
     {
         public JobStatus CheckJob(Job job, string remote_id)
         {
+            if (string.IsNullOrEmpty(remote_id))
+                return JobStatus.Processing;
+
             ConnectionInfo connInfo = new ConnectionInfo(job.ClusterProfile.Cluster.Url,
                 22, "prochkin", new AuthenticationMethod[]
                 {
                     new PasswordAuthenticationMethod("prochkin", "youcantfeeltheheat")
                 });
 
-            JobStatus result = JobStatus.Processing;
+            JobStatus result;
 
             using (SshClient sshClient = new SshClient(connInfo))
             {

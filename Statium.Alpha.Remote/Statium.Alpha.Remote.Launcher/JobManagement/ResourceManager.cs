@@ -30,9 +30,11 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         public async Task<JobStatus> GetJobStatusAsync(int jobId)
         {
             JobStatus result = JobStatus.Aborted;
-            Job subject = new Job();//activeJobs.Where(j => j.Id == jobId).First();
+            Job subject = new Job() { Id = jobId};//activeJobs.Where(j => j.Id == jobId).First();
             IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-            result = accessor.CheckJob(subject, activeJobs[jobId]);
+            string remoteKey;
+            activeJobs.TryGetValue(jobId, out remoteKey);
+            result = accessor.CheckJob(subject, remoteKey);
 
             if (result == JobStatus.Aborted || result == JobStatus.Killed)
                 activeJobs.Remove(jobId);    
@@ -44,9 +46,11 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         //Upon this operation the job is removed from a remote system and will no longer be accesible
         public void KillJob(int jobId)
         {
-            Job subject = new Job();
+            Job subject = new Job() { Id = jobId };
             IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-            accessor.KillJob(subject, activeJobs[jobId]);
+            string remoteKey;
+            activeJobs.TryGetValue(jobId, out remoteKey);
+            accessor.KillJob(subject, remoteKey);
             activeJobs.Remove(jobId);
         }
 
@@ -56,9 +60,11 @@ namespace Statium.Alpha.Remote.Launcher.JobManagement
         {
             int[] result;
 
-            Job subject = new Job();//activeJobs.Where(j => j.Id == jobId).First();
+            Job subject = new Job() { Id = jobId };//activeJobs.Where(j => j.Id == jobId).First();
             IRemoteSystemAccessor accessor = accessorFactory.GetAccessor(subject.ClusterProfile.Cluster.LaunchType);
-            result = accessor.FetchResults(subject, activeJobs[jobId]);
+            string remoteKey;
+            activeJobs.TryGetValue(jobId, out remoteKey);
+            result = accessor.FetchResults(subject, remoteKey);
             activeJobs.Remove(jobId);
             return result;
         }
