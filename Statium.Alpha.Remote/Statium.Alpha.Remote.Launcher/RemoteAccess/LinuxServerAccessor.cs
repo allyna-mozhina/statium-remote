@@ -26,10 +26,10 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
             {
                 sshClient.Connect();
 
-                using (SshCommand poll = sshClient.CreateCommand("echo YAY"))
+                using (SshCommand poll = sshClient.CreateCommand($"ls ~/Statium.Remote/{job.Id}/result.csv"))
                 {
                     poll.Execute();
-                    string pollOut = poll.Result;
+                    /*string*/int pollOut = poll.ExitStatus;//poll.Result;
                     result = ParsePoll(pollOut);
                 }
 
@@ -222,9 +222,12 @@ namespace Statium.Alpha.Remote.Launcher.RemoteAccess
             return result;
         }
 
-        private JobStatus ParsePoll(string pollOut)
+        private JobStatus ParsePoll(/*string*/int pollOut)
         {
-            return JobStatus.Completed;
+            if (pollOut == 0)
+                return JobStatus.Completed;
+            else
+                return JobStatus.Queued;
         }
     }
 }
